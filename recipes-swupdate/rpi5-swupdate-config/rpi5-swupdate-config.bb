@@ -14,7 +14,7 @@ SRC_URI = " \
     file://swupdate-webui.conf \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 inherit systemd
 
@@ -30,26 +30,26 @@ RDEPENDS:${PN} = "swupdate bash util-linux"
 do_install() {
     # ── swupdate main config ────────────────────────────────────────────────
     install -d ${D}${sysconfdir}/swupdate
-    install -m 0644 ${WORKDIR}/swupdate.cfg \
+    install -m 0644 ${UNPACKDIR}/swupdate.cfg \
                     ${D}${sysconfdir}/swupdate/swupdate.cfg
 
     # ── A/B slot helper scripts (also shipped in .swu packages) ────────────
     install -d ${D}${libdir}/swupdate
-    install -m 0755 ${WORKDIR}/pre-install.sh \
+    install -m 0755 ${UNPACKDIR}/pre-install.sh \
                     ${D}${libdir}/swupdate/pre-install.sh
-    install -m 0755 ${WORKDIR}/post-install.sh \
+    install -m 0755 ${UNPACKDIR}/post-install.sh \
                     ${D}${libdir}/swupdate/post-install.sh
-    install -m 0755 ${WORKDIR}/swupdate-bootcheck.sh \
+    install -m 0755 ${UNPACKDIR}/swupdate-bootcheck.sh \
                     ${D}${libdir}/swupdate/swupdate-bootcheck.sh
 
     # ── systemd units ───────────────────────────────────────────────────────
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${WORKDIR}/swupdate-bootcheck.service \
+    install -m 0644 ${UNPACKDIR}/swupdate-bootcheck.service \
                     ${D}${systemd_system_unitdir}/swupdate-bootcheck.service
 
     # Drop-in: enable Mongoose web UI and point at our config file
     install -d ${D}${systemd_system_unitdir}/swupdate.service.d
-    install -m 0644 ${WORKDIR}/swupdate-webui.conf \
+    install -m 0644 ${UNPACKDIR}/swupdate-webui.conf \
                     ${D}${systemd_system_unitdir}/swupdate.service.d/webui.conf
 }
 

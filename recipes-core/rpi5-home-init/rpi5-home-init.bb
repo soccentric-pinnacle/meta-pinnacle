@@ -13,7 +13,7 @@ SRC_URI = " \
     file://rpi5-home-init.service \
 "
 
-S = "${WORKDIR}"
+S = "${UNPACKDIR}"
 
 inherit systemd
 
@@ -24,11 +24,11 @@ RDEPENDS:${PN} = "bash util-linux parted e2fsprogs-resize2fs"
 
 do_install() {
     install -d ${D}${libdir}/rpi5-home-init
-    install -m 0755 ${WORKDIR}/rpi5-home-init.sh \
+    install -m 0755 ${UNPACKDIR}/rpi5-home-init.sh \
                     ${D}${libdir}/rpi5-home-init/rpi5-home-init.sh
 
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${WORKDIR}/rpi5-home-init.service \
+    install -m 0644 ${UNPACKDIR}/rpi5-home-init.service \
                     ${D}${systemd_system_unitdir}/rpi5-home-init.service
 }
 
