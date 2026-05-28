@@ -1,0 +1,1 @@
+S = "${WORKDIR}/${BP}-${IMX_SRCREV_ABBREV}"

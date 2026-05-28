@@ -1,0 +1,23 @@
+From a1b2c3d4e5f6g7h8i9j0a1b2c3d4e5f6g7h8i9j0 Mon Sep 17 00:00:00 2001
+From: Fix <fix@example.com>
+Date: Wed, 27 May 2026 19:10:00 +0000
+Subject: [PATCH] Remove transitional from arch/Kconfig
+
+Upstream-Status: Pending
+---
+ arch/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -944,7 +944,6 @@
+ 
+ config CFI_CLANG
+ 	bool
+-	transitional
+ 	help
+ 	  Transitional config for CFI_CLANG to CFI migration.
+ 
+-- 
+2.34.1
