@@ -1,41 +1,50 @@
 #!/bin/bash
-# SWUpdate pre-install script ─ included in every .swu package
+# SWUpdate pre-install script — included in every .swu package
 #
 # Identifies the inactive rootfs slot and creates the /dev/swupdate-inactive
-# symlink that the "raw" image handler in sw-description writes to.
-# Saves the target slot/device to /run/ for use by post-install.sh.
+# symlink. Also backs up kernel and DTB for rollback recovery.
 
 set -euo pipefail
 
-# ── Find the currently active root device ────────────────────────────────────
 ACTIVE_DEV=$(findmnt -n -o SOURCE /)
 echo "[swupdate pre-install] active root: ${ACTIVE_DEV}"
 
-case "${ACTIVE_DEV}" in
-    /dev/mmcblk0p2)
-        INACTIVE_DEV=/dev/mmcblk0p3
+ACTIVE_LABEL=$(lsblk -n -o LABEL "${ACTIVE_DEV}" 2>/dev/null | head -1 | tr -d ' ')
+
+case "${ACTIVE_LABEL}" in
+    rootfs-a)
+        INACTIVE_LABEL=rootfs-b
         INACTIVE_SLOT=b
         ;;
-    /dev/mmcblk0p3)
-        INACTIVE_DEV=/dev/mmcblk0p2
+    rootfs-b)
+        INACTIVE_LABEL=rootfs-a
         INACTIVE_SLOT=a
         ;;
     *)
-        echo "[swupdate pre-install] ERROR: unexpected active device '${ACTIVE_DEV}'" >&2
+        echo "[swupdate pre-install] ERROR: active label '${ACTIVE_LABEL:-<empty>}' is not rootfs-a/b" >&2
         exit 1
         ;;
 esac
 
-echo "[swupdate pre-install] target slot: ${INACTIVE_SLOT} (${INACTIVE_DEV})"
+INACTIVE_DEV=$(lsblk -n -o PATH,LABEL | awk -v want="${INACTIVE_LABEL}" '$2 == want {print $1; exit}')
 
-# ── Ensure the inactive partition is not mounted ──────────────────────────────
-if mountpoint -q /mnt/rootfs-inactive 2>/dev/null; then
-    umount /mnt/rootfs-inactive
+if [[ -z "${INACTIVE_DEV}" ]]; then
+    echo "[swupdate pre-install] ERROR: no device with label '${INACTIVE_LABEL}'" >&2
+    exit 1
 fi
 
-# ── Create the stable symlink the image handler will write to ─────────────────
+echo "[swupdate pre-install] target slot: ${INACTIVE_SLOT} (${INACTIVE_DEV})"
+
+mount -o remount,rw /boot
+for f in Image imx93-11x11-lpddr4x-frdm.dtb; do
+    if [[ -f "/boot/${f}" ]]; then
+        cp "/boot/${f}" "/boot/${f}.prev"
+        echo "[swupdate pre-install] backed up /boot/${f}"
+    fi
+done
+mount -o remount,ro /boot
+
 ln -sf "${INACTIVE_DEV}" /dev/swupdate-inactive
 
-# ── Persist slot info for post-install ────────────────────────────────────────
 echo "${INACTIVE_SLOT}" > /run/swupdate-target-slot
 echo "${INACTIVE_DEV}"  > /run/swupdate-target-dev

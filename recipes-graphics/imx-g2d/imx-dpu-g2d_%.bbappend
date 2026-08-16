@@ -1,0 +1,1 @@
+S = "${WORKDIR}/${IMX_BIN_NAME}"
