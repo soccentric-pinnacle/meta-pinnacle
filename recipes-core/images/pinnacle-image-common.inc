@@ -45,3 +45,6 @@ IMAGE_INSTALL:append = " \
     valgrind ltrace perf trace-cmd elfutils logrotate rsyslog audit \
     libgpiod i2c-tools spitools libiio \
 "
+
+# WebConfig (Pinnacle-Configuration's meta-webconfig layer, kas/repos/pinnacle-configuration.yaml).
+IMAGE_INSTALL:append = " webconfigd webconfig-static webconfig-schemas webconfig-manifest"
