@@ -3,7 +3,7 @@ header:
 
 repos:
   meta-pinnacle:
-    url: git@github.com:SiliconCentric/meta-pinnacle.git
+    url: https://github.com/soccentric-pinnacle/meta-pinnacle.git
     branch: master
     # TODO: pin to a specific commit — run scripts/pin-layers.sh
     path: meta/meta-pinnacle
