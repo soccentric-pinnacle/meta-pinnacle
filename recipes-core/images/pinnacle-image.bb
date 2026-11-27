@@ -12,7 +12,7 @@ IMAGE_FEATURES += "ssh-server-openssh"
 # OTA / swupdate
 # pinnacle-swupdate-config implements the inactive-slot, boot-selection, and
 # rollback flow for sdimage-imx93.wks.
-IMAGE_INSTALL:append:imx93-11x11-lpddr4x-frdm = " swupdate swupdate-www pinnacle-swupdate-config"
+IMAGE_INSTALL:append:imx93-11x11-lpddr4x-frdm = " swupdate pinnacle-swupdate-config"
 
 # Home partition init (persistent /home on the data partition)
 IMAGE_INSTALL:append = " pinnacle-data-init"
