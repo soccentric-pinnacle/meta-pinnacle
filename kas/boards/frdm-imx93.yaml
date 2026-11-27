@@ -1,0 +1,11 @@
+header:
+  version: 14
+  includes:
+    - ../common.yaml
+
+machine: imx93-11x11-lpddr4x-frdm
+
+local_conf_header:
+  wks: |
+    # A/B OTA partition layout (see meta-pinnacle/wic/sdimage-imx93.wks)
+    WKS_FILE = "sdimage-imx93.wks"

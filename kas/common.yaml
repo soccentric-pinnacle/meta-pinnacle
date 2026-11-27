@@ -1,0 +1,62 @@
+header:
+  version: 14
+  includes:
+    - repos/poky.yaml
+    - repos/meta-openembedded.yaml
+    - repos/meta-arm.yaml
+    - repos/meta-freescale.yaml
+    - repos/meta-freescale-distro.yaml
+    - repos/meta-imx.yaml
+    - repos/meta-swupdate.yaml
+    - repos/meta-pinnacle.yaml
+
+distro: fsl-imx-fb
+target: pinnacle-image
+
+local_conf_header:
+  base: |
+    # Init manager
+    INIT_MANAGER = "systemd"
+
+    # SD card / eMMC image output
+    IMAGE_FSTYPES = "wic.bz2 wic.bmap ext4"
+
+    # Accept NXP End User License Agreement (required for proprietary firmware)
+    ACCEPT_FSL_EULA = "1"
+
+    # Shared caches (bind-mounted by Docker)
+    DL_DIR     ?= "${TOPDIR}/../downloads"
+    SSTATE_DIR ?= "${TOPDIR}/../sstate-cache"
+
+    # SWUpdate: Mongoose webserver is already enabled in the default defconfig
+    # (CONFIG_WEBSERVER=y, CONFIG_MONGOOSE=y). PACKAGECONFIG is not used by
+    # swupdate 2025.12 so the old "webserver" PACKAGECONFIG append is removed.
+
+    # Required by Poky sanity checks (must match LOCALCONF_VERSION in poky)
+    CONF_VERSION = "2"
+
+    # Treat dangling .bbappend files (version mismatches between meta-imx and
+    # the poky walnascar versions) as warnings, not fatal errors.
+    BB_DANGLINGAPPENDS_ABORTPOLICY = "warn"
+
+    # A/B OTA rollback/A-B redundancy via U-Boot boot environment
+    UBOOT_ENV_SUFFIX = "scr"
+    UBOOT_ENV = "boot"
+    MACHINE_FEATURES:append = " u-boot"
+    EXTRA_IMAGEDEPENDS += "u-boot"
+    IMAGE_INSTALL:append = " u-boot-fw-utils"
+
+    # SWUpdate init
+    SWUPDATE_INIT = "systemd"
+
+    # Define BB_GIT_DEFAULT_DESTSUFFIX which meta-imx recipes rely on.
+    # In walnascar (poky 5.2) this variable is no longer defined in bitbake,
+    # so recipes using destsuffix=${BB_GIT_DEFAULT_DESTSUFFIX}/... would
+    # expand to an absolute path (/foo) and os.path.join would treat it as
+    # system root. Setting it to "git" matches the bitbake git fetcher default
+    # (def_destsuffix = "git/") and restores the expected layout.
+    BB_GIT_DEFAULT_DESTSUFFIX = "git"
+
+    # Mask NXP's git-submodule-based qemu recipes (broken gitlab URLs / alternates
+    # double-slash bug). Use poky's tarball-based qemu-native 9.2.0 instead.
+    BBMASK += "meta-imx/meta-imx-bsp/recipes-devtools/qemu/qemu-native_9.0.2.imx.bb meta-imx/meta-imx-bsp/recipes-devtools/qemu/qemu-system-native_9.0.2.imx.bb meta-imx/meta-imx-bsp/recipes-devtools/qemu/qemu_9.0.2.imx.bb"

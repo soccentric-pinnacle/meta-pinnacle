@@ -1,0 +1,16 @@
+header:
+  version: 14
+
+repos:
+  meta-openembedded:
+    url: https://github.com/openembedded/meta-openembedded
+    branch: walnascar
+    # Pinned to HEAD of walnascar (aligned with meta-imx rel_imx_6.18.2_1.0.0)
+    commit: 07330a98cf93806b7a4e0170a541b94962ff3960
+    path: layers/meta-openembedded
+    layers:
+      meta-oe:
+      meta-python:
+      meta-networking:
+      meta-multimedia:
+      meta-perl:

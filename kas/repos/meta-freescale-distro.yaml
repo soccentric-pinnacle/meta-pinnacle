@@ -1,0 +1,9 @@
+header:
+  version: 14
+
+repos:
+  meta-freescale-distro:
+    url: https://github.com/Freescale/meta-freescale-distro.git
+    branch: walnascar
+    commit: b9c3536b68271c420fe5de36fc284781ceaa32ab
+    path: layers/meta-freescale-distro

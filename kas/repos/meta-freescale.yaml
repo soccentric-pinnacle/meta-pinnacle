@@ -1,0 +1,9 @@
+header:
+  version: 14
+
+repos:
+  meta-freescale:
+    url: https://github.com/Freescale/meta-freescale.git
+    branch: walnascar
+    commit: 80693f57743e64065f919ea77c0b2057636b0092
+    path: layers/meta-freescale

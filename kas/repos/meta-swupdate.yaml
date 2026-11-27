@@ -1,0 +1,10 @@
+header:
+  version: 14
+
+repos:
+  meta-swupdate:
+    url: https://github.com/sbabic/meta-swupdate
+    branch: walnascar
+    # TODO: pin to a specific commit — run scripts/pin-layers.sh
+    commit: 4e78bedc00f59cf2e7c5a757f5638ea7fca9241e
+    path: layers/meta-swupdate

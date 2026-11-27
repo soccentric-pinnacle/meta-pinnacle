@@ -1,0 +1,11 @@
+header:
+  version: 14
+
+repos:
+  meta-pinnacle:
+    url: https://github.com/soccentric-pinnacle/meta-pinnacle.git
+    branch: master
+    # TODO: pin to a specific commit — run scripts/pin-layers.sh
+    path: meta/meta-pinnacle
+    layers:
+      .:

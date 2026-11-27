@@ -1,0 +1,16 @@
+header:
+  version: 14
+
+repos:
+  poky:
+    url: https://git.yoctoproject.org/poky
+    branch: walnascar
+    # TODO: pin to a specific commit for reproducible builds.
+    # Run: scripts/pin-layers.sh  or set manually:
+    #   commit: <40-char-sha>
+    commit: d0b46a6624ec9c61c47270745dd0b2d5abbe6ac1
+    path: layers/poky
+    layers:
+      meta:
+      meta-poky:
+      meta-yocto-bsp:

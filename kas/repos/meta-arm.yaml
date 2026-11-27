@@ -1,0 +1,13 @@
+header:
+  version: 14
+
+repos:
+  meta-arm:
+    url: https://git.yoctoproject.org/meta-arm
+    branch: walnascar
+    # Pinned to HEAD of walnascar (aligned with meta-imx rel_imx_6.18.2_1.0.0)
+    commit: b68089f2648d712b9406d0e88c71758913267f81
+    path: layers/meta-arm
+    layers:
+      meta-arm:
+      meta-arm-toolchain:
